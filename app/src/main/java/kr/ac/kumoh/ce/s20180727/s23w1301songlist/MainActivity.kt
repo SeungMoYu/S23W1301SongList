@@ -64,68 +64,8 @@ fun MainScreen(viewModel: SongViewModel) {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            SongList(songList)
+            SongApp(songList)
         }
     }
 }
 
-@Composable
-fun SongList(list: List<Song>){
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(horizontal = 8.dp)
-    ){
-        itemsIndexed(list) {index, song->
-            SongItem(index, song)
-        }
-    }
-}
-
-@Composable
-fun SongItem(index: Int, song: Song) {
-    var expanded by remember { mutableStateOf(false)}
-
-    Card (
-        modifier = Modifier.clickable{expanded = !expanded},
-        elevation = CardDefaults.cardElevation(8.dp)
-    ){
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-                //.background(Color(255, 210, 210))
-                .padding(8.dp)
-        ) {
-            AsyncImage(
-                model = "https://picsum.photos/300/300?random=${index}",
-                contentDescription = "노래 앨범 이미지",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(RoundedCornerShape(percent = 10)),
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceAround
-            ) {
-                TextTitle(song.title)
-                TextSinger(song.singer)
-            }
-        }
-        AnimatedVisibility(visible = expanded) {
-            song.lyrics?.let { Text(it) }
-        }
-    }
-}
-
-@Composable
-fun TextTitle(title: String) {
-    Text(title, fontSize = 30.sp)
-}
-
-@Composable
-fun TextSinger(singer: String) {
-    Text(singer, fontSize = 20.sp)
-}
